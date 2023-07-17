@@ -2,11 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\NoteRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ApiResource]
 #[ORM\Entity(repositoryClass: NoteRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Note
 {
     #[ORM\Id]
@@ -78,5 +81,9 @@ class Note
         $this->student = $student;
 
         return $this;
+    }
+    #[ORM\PrePersist]
+    public function prePersist(){
+        $this->createdAt = new \DateTime();
     }
 }
